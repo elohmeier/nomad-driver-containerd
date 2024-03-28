@@ -109,6 +109,7 @@ func (d *Driver) pullImage(imageName, imagePullTimeout string, auth *RegistryAut
 
 	pullOpts := []containerd.RemoteOpt{
 		containerd.WithPullUnpack,
+		containerd.WithPullSnapshotter("nix"),
 		withResolver(d.parshAuth(auth)),
 	}
 
@@ -339,6 +340,7 @@ func (d *Driver) createContainer(containerConfig *ContainerConfig, config *TaskC
 		ctxWithTimeout,
 		containerConfig.ContainerName,
 		containerd.WithRuntime(d.config.ContainerdRuntime, nil),
+		containerd.WithSnapshotter("nix"),
 		containerd.WithNewSnapshot(containerConfig.ContainerSnapshotName, containerConfig.Image),
 		containerd.WithNewSpec(opts...),
 	)
